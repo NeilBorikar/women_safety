@@ -27,3 +27,12 @@ async def add_contact(data: AddEmergencyContact, user=Depends(verify_token)):
         data.contact.dict()
     )
     return success_response(updated, "Contact added")
+
+
+@router.delete("/contact/{contact_id}")
+async def delete_contact(contact_id: str, user=Depends(verify_token)):
+    updated = await UserRepository.delete_emergency_contact(
+        user["user_id"],
+        contact_id
+    )
+    return success_response(updated, "Contact deleted")

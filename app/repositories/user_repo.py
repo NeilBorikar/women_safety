@@ -1,6 +1,7 @@
 from app.db.mongodb import user_collection
 from app.repositories.base_repo import BaseRepository
 from app.utils.exceptions import NotFoundException, BadRequestException
+import uuid
 
 
 class UserRepository(BaseRepository):
@@ -46,9 +47,25 @@ class UserRepository(BaseRepository):
         if "phone" not in contact:
             raise BadRequestException("Contact must include phone number")
 
+        # Ensure contact has a unique ID
+        if not contact.get("id"):
+            contact["id"] = str(uuid.uuid4())
+
         result = await user_collection.update_one(
             {"_id": BaseRepository.to_objectid(user_id)},
             {"$push": {"emergency_contacts": contact}}
+        )
+
+        if result.matched_count == 0:
+            raise NotFoundException("User not found")
+
+        return await UserRepository.get_by_id(user_id)
+
+    @staticmethod
+    async def delete_emergency_contact(user_id: str, contact_id: str):
+        result = await user_collection.update_one(
+            {"_id": BaseRepository.to_objectid(user_id)},
+            {"$pull": {"emergency_contacts": {"id": contact_id}}}
         )
 
         if result.matched_count == 0:

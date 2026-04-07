@@ -31,3 +31,10 @@ class AlertRepository(BaseRepository):
             "status": "active"
         })
         return BaseRepository.serialize([alert async for alert in alerts])
+
+    @staticmethod
+    async def get_all_alerts_by_user(user_id: str):
+        alerts = alert_collection.find({
+            "user_id": user_id
+        }).sort("created_at", -1)
+        return BaseRepository.serialize([alert async for alert in alerts])

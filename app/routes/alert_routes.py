@@ -17,3 +17,9 @@ async def trigger_alert(data: AlertTrigger, user=Depends(verify_token)):
 async def resolve_alert(alert_id: str, user=Depends(verify_token)):
     result = await AlertService.resolve_alert(alert_id)
     return success_response(result, "Alert resolved")
+
+
+@router.get("/all")
+async def get_all_alerts(user=Depends(verify_token)):
+    result = await AlertService.get_user_alerts(user["user_id"])
+    return success_response(result)

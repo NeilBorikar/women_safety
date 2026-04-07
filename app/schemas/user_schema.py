@@ -6,6 +6,7 @@ import re
 # 📞 Emergency Contact
 
 class EmergencyContact(BaseModel):
+    id: Optional[str] = None
     name: str = Field(..., min_length=2, max_length=50)
     phone: str = Field(..., min_length=10, max_length=15)
     email: Optional[EmailStr] = None

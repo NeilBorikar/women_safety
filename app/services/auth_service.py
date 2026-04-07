@@ -26,8 +26,19 @@ class AuthService:
         # 💾 Save to DB
         user_id = await UserRepository.create_user(new_user)
 
-        return {
+        # 🔐 Generate token
+        token = create_access_token({
             "user_id": user_id,
+            "email": user_data.email
+        })
+
+        return {
+            "access_token": token,
+            "user": {
+                "id": user_id,
+                "name": user_data.name,
+                "email": user_data.email
+            },
             "message": "User registered successfully"
         }
 

@@ -52,3 +52,8 @@ class AlertService:
             "alert_id": alert_id,
             "status": updated["status"]
         }
+
+    @staticmethod
+    async def get_user_alerts(user_id: str):
+        alerts = await AlertRepository.get_all_alerts_by_user(user_id)
+        return alerts
