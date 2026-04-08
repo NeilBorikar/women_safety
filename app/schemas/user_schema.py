@@ -8,15 +8,9 @@ import re
 class EmergencyContact(BaseModel):
     id: Optional[str] = None
     name: str = Field(..., min_length=2, max_length=50)
-    phone: str = Field(..., min_length=10, max_length=15)
+    phone: str = Field(..., pattern=r"^\d{10,15}$")
     email: Optional[EmailStr] = None
     relation: Optional[str] = Field(None, max_length=30)
-
-    @field_validator("phone")
-    def validate_phone(cls, v):
-        if not v.isdigit():
-            raise ValueError("Phone must contain only digits")
-        return v
 
 
 # 🔐 User Register
