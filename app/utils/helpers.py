@@ -8,7 +8,7 @@ def get_current_time():
 
 def convert_objectid(data):
     """
-    Converts MongoDB ObjectId to string
+    Converts MongoDB ObjectId to string and adds 'id' field
     """
     if data is None:
         return None
@@ -17,13 +17,21 @@ def convert_objectid(data):
         return [convert_objectid(item) for item in data]
 
     if isinstance(data, dict):
+        # Create a clean shallow copy to avoid side effects
         res = {**data}
         if "_id" in res:
-            res["_id"] = str(res["_id"])
-            res["id"] = res["_id"]
+            obj_id_str = str(res["_id"])
+            res["_id"] = obj_id_str
+            res["id"] = obj_id_str
+            
+        # Specific handling for the emergency contacts list if it exists
+        if "emergency_contacts" in res and isinstance(res["emergency_contacts"], list):
+            res["emergency_contacts"] = [convert_objectid(c) for c in res["emergency_contacts"]]
+            
         return res
 
     return data
+
 
 
 

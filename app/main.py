@@ -58,7 +58,7 @@ app.add_middleware(
 
 
 # 🌐 Root Health Check
-@app.get("/")
+@app.get("/", methods=["GET", "HEAD"])
 async def root():
     return {
         "status": "running",
