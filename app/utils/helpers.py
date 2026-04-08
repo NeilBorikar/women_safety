@@ -17,21 +17,19 @@ def convert_objectid(data):
         return [convert_objectid(item) for item in data]
 
     if isinstance(data, dict):
-        # Create a copy to avoid mutating the original MongoDB doc if referenced elsewhere
-        res = {**data}
-        if "_id" in res:
-            str_id = str(res["_id"])
-            res["_id"] = str_id
-            res["id"] = str_id
+        # Handle current object
+        if "_id" in data:
+            data["id"] = str(data["_id"])
+            data["_id"] = str(data["_id"])
         
-        # Recursively convert nested objects (like emergency_contacts)
-        for key, value in res.items():
-            if isinstance(value, (dict, list)):
-                res[key] = convert_objectid(value)
-        
-        return res
+        # Handle nested emergency_contacts specifically
+        if "emergency_contacts" in data and isinstance(data["emergency_contacts"], list):
+            data["emergency_contacts"] = [convert_objectid(c) for c in data["emergency_contacts"]]
+            
+        return data
 
     return data
+
 
 
 
