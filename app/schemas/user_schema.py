@@ -8,9 +8,10 @@ import re
 class EmergencyContact(BaseModel):
     id: Optional[str] = None
     name: str = Field(..., min_length=2, max_length=50)
-    phone: str = Field(..., pattern=r"^\d{10,15}$")
+    phone: str = Field(..., min_length=10, max_length=15)
     email: Optional[EmailStr] = None
     relation: Optional[str] = Field(None, max_length=30)
+
 
 
 # 🔐 User Register
