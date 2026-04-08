@@ -16,7 +16,9 @@ class UserRepository(BaseRepository):
 
     @staticmethod
     async def get_by_email(email: str):
-        user = await user_collection.find_one({"email": email})
+        # Normalize email for search
+        clean_email = email.lower().strip()
+        user = await user_collection.find_one({"email": clean_email})
         return BaseRepository.serialize(user) if user else None
 
     @staticmethod
