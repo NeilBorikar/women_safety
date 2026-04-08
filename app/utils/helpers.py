@@ -27,6 +27,13 @@ def convert_objectid(data):
         # Specific handling for the emergency contacts list if it exists
         if "emergency_contacts" in res and isinstance(res["emergency_contacts"], list):
             res["emergency_contacts"] = [convert_objectid(c) for c in res["emergency_contacts"]]
+
+        # Handle datetimes and other nested objects
+        for key, value in res.items():
+            if isinstance(value, datetime):
+                res[key] = value.isoformat()
+            elif isinstance(value, (dict, list)) and key != "emergency_contacts":
+                res[key] = convert_objectid(value)
             
         return res
 
