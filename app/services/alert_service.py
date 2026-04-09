@@ -28,8 +28,8 @@ class AlertService:
         }
 
         await NotificationService.notify_contacts(
-            user.get("emergency_contacts", []),
-            user["name"],
+            user,
+            alert_id,
             location
         )
 

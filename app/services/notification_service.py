@@ -69,33 +69,45 @@ Please act immediately.
     @staticmethod
     async def notify_contacts(user, alert_id, location):
         contacts = user.get("emergency_contacts", [])
-        message = NotificationService.build_message(user["name"], location)
+        
+        print(f"DEBUG: Notifying {len(contacts)} contacts for user {user.get('name')}")
+        
+        message = NotificationService.build_message(user.get("name", "Someone"), location)
 
         tasks = []
 
         for contact in contacts:
+            contact_name = contact.get("name", "Contact")
+            phone = contact.get("phone")
+            email = contact.get("email")
+
+            print(f"DEBUG: Processing contact {contact_name} (Phone: {phone}, Email: {email})")
 
             # 📧 Email
-            if contact.get("email"):
+            if email:
                 tasks.append(
                     NotificationService.send_email(
                         user["id"],
                         alert_id,
-                        contact["email"],
+                        email,
                         message
                     )
                 )
 
             # 📱 SMS
-            if contact.get("phone"):
+            if phone:
                 tasks.append(
                     NotificationService.send_sms(
                         user["id"],
                         alert_id,
-                        contact["phone"],
+                        phone,
                         message
                     )
                 )
 
+        if not tasks:
+            print("DEBUG: No valid notification tasks found (contacts might be missing phone/email)")
+
         # ⚡ Run all notifications in parallel
         await asyncio.gather(*tasks, return_exceptions=True)
+        print("DEBUG: All notification tasks completed.")
