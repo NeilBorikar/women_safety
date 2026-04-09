@@ -13,10 +13,20 @@ class SMSService:
 
     def send_sms(self, phone: str, message: str):
         try:
+            # 🌍 Format number for Twilio (ensure it starts with +)
+            final_phone = str(phone).strip()
+            if not final_phone.startswith('+'):
+                if len(final_phone) == 10:
+                    final_phone = f"+91{final_phone}"
+                else:
+                    final_phone = f"+{final_phone}"
+            
+            print(f"DEBUG: Twilio sending to: {final_phone}")
+
             message = self.client.messages.create(
                 body=message,
                 from_=self.from_number,
-                to=phone
+                to=final_phone
             )
             return message.sid
 
