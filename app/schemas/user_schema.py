@@ -59,12 +59,19 @@ class AddEmergencyContact(BaseModel):
     contact: EmergencyContact
 
 
+# 🔗 Pair Device
+
+class DevicePair(BaseModel):
+    device_id: str
+
+
 # 📤 Response Schema
 
 class UserResponse(BaseModel):
     id: str
     name: str
     email: EmailStr
+    paired_device_id: Optional[str] = None
     emergency_contacts: List[EmergencyContact] = []
 
 

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from app.schemas.user_schema import UserUpdate, AddEmergencyContact
+from app.schemas.user_schema import UserUpdate, AddEmergencyContact, DevicePair
 from app.services.auth_service import AuthService
 from app.repositories.user_repo import UserRepository
 from app.core.security import verify_token
@@ -36,3 +36,12 @@ async def delete_contact(contact_id: str, user=Depends(verify_token)):
         contact_id
     )
     return success_response(updated, "Contact deleted")
+
+
+@router.post("/pair-device")
+async def pair_device(data: DevicePair, user=Depends(verify_token)):
+    updated = await UserRepository.update_user(
+        user["user_id"], 
+        {"paired_device_id": data.device_id}
+    )
+    return success_response(updated, "Device paired successfully")
