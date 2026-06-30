@@ -9,6 +9,8 @@ router = APIRouter()
 
 @router.post("/trigger")
 async def trigger_alert(data: AlertTrigger, user=Depends(verify_token)):
+    # Inject secure user_id from the verified JWT token
+    data.user_id = user["user_id"]
     result = await AlertService.trigger_alert(data)
     return success_response(result, "Alert triggered")
 

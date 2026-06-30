@@ -6,7 +6,7 @@ from datetime import datetime
 # 🚨 ALERT TRIGGER
 
 class AlertTrigger(BaseModel):
-    user_id: str
+    user_id: Optional[str] = None
     latitude: float
     longitude: float
     device_id: Optional[str] = None
