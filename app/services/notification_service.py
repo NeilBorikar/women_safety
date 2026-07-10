@@ -67,7 +67,7 @@ Please act immediately.
 
     # 🚀 MAIN NOTIFIER (PARALLEL + ROBUST)
     @staticmethod
-    async def notify_contacts(user, alert_id, location):
+    async def notify_contacts(user, alert_id, location, skip_sms: bool = False):
         contacts = user.get("emergency_contacts", [])
         
         print(f"DEBUG: Notifying {len(contacts)} contacts for user {user.get('name')}")
@@ -95,7 +95,7 @@ Please act immediately.
                 )
 
             # 📱 SMS
-            if phone:
+            if phone and not skip_sms:
                 tasks.append(
                     NotificationService.send_sms(
                         user["id"],

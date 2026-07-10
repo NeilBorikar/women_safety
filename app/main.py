@@ -5,6 +5,11 @@ import logging
 # 🔌 DB
 from app.db.mongodb import connect_to_mongo, close_mongo_connection
 
+# 🚀 Cache
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+from redis import asyncio as aioredis
+
 # 📦 Routes
 from app.routes import (
     auth_routes,
@@ -29,6 +34,11 @@ async def lifespan(app: FastAPI):
     # 🚀 Startup
     logger.info("🚀 Starting Women Safety Backend...")
     await connect_to_mongo()
+    
+    logger.info("🚀 Connecting to Redis Cache...")
+    # NOTE: In production, configure this URL via environment variables (.env)
+    redis = aioredis.from_url("redis://localhost:6379", encoding="utf8", decode_responses=True)
+    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
 
     yield
 

@@ -42,3 +42,8 @@ twilio==9.2.3
 
 # Async utilities (if needed later)
 # anyio==4.4.0
+# ========================
+# CACHING
+# ========================
+redis==5.0.4
+fastapi-cache2[redis]==0.2.1

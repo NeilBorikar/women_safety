@@ -4,11 +4,13 @@ from app.services.auth_service import AuthService
 from app.repositories.user_repo import UserRepository
 from app.core.security import verify_token
 from app.utils.response import success_response
+from fastapi_cache.decorator import cache
 
 router = APIRouter()
 
 
 @router.get("/me")
+@cache(expire=60)
 async def get_profile(user=Depends(verify_token)):
     user_data = await UserRepository.get_by_id(user["user_id"])
     return success_response(user_data)

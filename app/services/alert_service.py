@@ -30,7 +30,8 @@ class AlertService:
         await NotificationService.notify_contacts(
             user,
             alert_id,
-            location
+            location,
+            alert_data.skip_sms
         )
 
         return {

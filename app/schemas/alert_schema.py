@@ -10,6 +10,7 @@ class AlertTrigger(BaseModel):
     latitude: float
     longitude: float
     device_id: Optional[str] = None
+    skip_sms: Optional[bool] = False
 
 
 # 🔁 ALERT STATUS
