@@ -46,4 +46,4 @@ twilio==9.2.3
 # CACHING
 # ========================
 redis==5.0.4
-fastapi-cache2[redis]==0.2.1
+fastapi-cache2[redis]==0.2.2
