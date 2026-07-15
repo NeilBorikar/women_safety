@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     # 🔐 JWT
     JWT_SECRET: str
     JWT_ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 43200  # 30 days
 
     # 📧 SMTP
     SMTP_SERVER: str

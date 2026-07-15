@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 import logging
+import os
 
 # 🔌 DB
 from app.db.mongodb import connect_to_mongo, close_mongo_connection
@@ -37,7 +38,8 @@ async def lifespan(app: FastAPI):
     
     logger.info("🚀 Connecting to Redis Cache...")
     # NOTE: In production, configure this URL via environment variables (.env)
-    redis = aioredis.from_url("redis://localhost:6379", encoding="utf8", decode_responses=True)
+    redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
+    redis = aioredis.from_url(redis_url, encoding="utf8", decode_responses=True)
     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
 
     yield
