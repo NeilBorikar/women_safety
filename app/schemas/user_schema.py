@@ -51,6 +51,7 @@ class UserLogin(BaseModel):
 
 class UserUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=2, max_length=50)
+    safety_pin: Optional[str] = Field(None, min_length=4, max_length=6)
 
 
 # ➕ Add Emergency Contact
@@ -72,6 +73,7 @@ class UserResponse(BaseModel):
     name: str
     email: EmailStr
     paired_device_id: Optional[str] = None
+    safety_pin: Optional[str] = None
     emergency_contacts: List[EmergencyContact] = []
 
 
